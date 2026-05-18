@@ -1,0 +1,13 @@
+services:
+  fastapi-app:
+    build: .
+    container_name: test-jenkins-api
+    networks:
+      - proxy_net
+    env_file:
+      - .env
+    restart: unless-stopped
+
+networks:
+  proxy_net:
+    external: true
