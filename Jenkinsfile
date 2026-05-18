@@ -21,7 +21,14 @@ pipeline {
             }
             steps {
                 sh '''
-                    pip install -r requirements.txt
+                    # 1. Crear y activar un entorno virtual dentro del workspace
+                    python -m venv venv
+                    . venv/bin/activate
+                    
+                    # 2. Instalar dependencias desactivando la caché (evita errores de permisos)
+                    pip install --no-cache-dir -r requirements.txt
+                    
+                    # 3. Ejecutar las pruebas (en su propia línea)
                     pytest tests/ --cov=app --cov-report=xml:coverage.xml
                 '''
             }
