@@ -2,13 +2,28 @@ pipeline {
     agent any
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '2'))
+        buildDiscarder(logRotator(numToKeepStr: '5'))
     }
 
     stages {
         stage('Checkout Repo') {
             steps {
                 checkout scm
+            }
+        }
+        
+        stage('Test (En Contenedor Python)') {
+            agent {
+                docker {
+                    image 'python:3.13-slim'
+                    reuseNode true 
+                }
+            }
+            steps {
+                sh '''
+                    pip install -r requirements.txt
+                    pytest tests/ --cov=app --cov-report=xml:coverage.xml
+                '''
             }
         }
         
