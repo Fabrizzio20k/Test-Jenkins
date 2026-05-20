@@ -50,10 +50,12 @@ pipeline {
 
         stage('Deploy (Docker Compose)') {
             steps {
-                sh '''
-                    docker compose down
-                    docker compose up -d --build
-                '''
+                withCredentials([string(credentialsId: 'KEY1', variable: 'KEY1')]) {
+                    sh '''
+                        docker compose down
+                        docker compose up -d --build
+                    '''
+                }
             }
         }
     }
