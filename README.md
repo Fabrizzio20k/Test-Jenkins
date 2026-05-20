@@ -1,5 +1,5 @@
 # Test-Jenkins
-Este es un proyecto de ejemplo para demostrar cómo configurar un pipeline de Jenkins que integra análisis de código con SonarQube para una API REST escrita en Python.
+Este es un proyecto de ejemplo para demostrar cómo configurar un pipeline de Jenkins que integra análisis de código con SonarQube para una API REST escrita en Python con diferentes branches.
 
 ## Agregar el webhook de Jenkins a GitHub
 1. Ve a tu repositorio en GitHub.
