@@ -1,9 +1,9 @@
 services:
   fastapi-app:
     build: .
-    container_name: test-jenkins-api
-    environment:
-      - KEY1=${KEY1}
+    container_name: test-jenkins-api-test
+    env_file:
+      - .env.test
     networks:
       - proxy_net
     restart: unless-stopped

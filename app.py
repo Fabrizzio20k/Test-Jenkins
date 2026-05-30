@@ -6,6 +6,8 @@ app = FastAPI()
 ENV_KEYS = {
     "key1": os.getenv("KEY1"),
     "key2": os.getenv("KEY2"),
+    "key3": os.getenv("KEY3"),
+    "key4": os.getenv("KEY4"),
 }
 
 

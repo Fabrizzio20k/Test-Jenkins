@@ -11,12 +11,15 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Test (En Contenedor Python)') {
+            when {
+                branch 'test'
+            }
             agent {
                 docker {
                     image 'python:3.13-slim'
-                    reuseNode true 
+                    reuseNode true
                 }
             }
             steps {
@@ -28,8 +31,11 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('SonarQube Analysis') {
+            when {
+                branch 'test'
+            }
             environment {
                 scannerHome = tool 'SonarScanner'
             }
@@ -39,8 +45,11 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Quality Gate') {
+            when {
+                branch 'test'
+            }
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
@@ -48,12 +57,31 @@ pipeline {
             }
         }
 
-        stage('Deploy (Docker Compose)') {
+        stage('Deploy Test (Docker Compose)') {
+            when {
+                branch 'test'
+            }
             steps {
-                withCredentials([string(credentialsId: 'KEY1', variable: 'KEY1')]) {
+                withCredentials([file(credentialsId: 'TEST_JENKINS_TEST', variable: 'SECRET_FILE')]) {
                     sh '''
-                        docker compose down
-                        docker compose up -d --build
+                        cp "$SECRET_FILE" .env.test
+                        docker compose -f docker-compose.test.yml down
+                        docker compose -f docker-compose.test.yml up -d --build
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Dev (Docker Compose)') {
+            when {
+                branch 'development'
+            }
+            steps {
+                withCredentials([file(credentialsId: 'TEST_JENKINS_DEV', variable: 'SECRET_FILE')]) {
+                    sh '''
+                        cp "$SECRET_FILE" .env.dev
+                        docker compose -f docker-compose.dev.yml down
+                        docker compose -f docker-compose.dev.yml up -d --build
                     '''
                 }
             }
