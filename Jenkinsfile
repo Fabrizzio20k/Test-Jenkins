@@ -79,7 +79,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'TEST_JENKINS_DEV', variable: 'SECRET_FILE')]) {
                     sh '''
-                        cp "$SECRET_FILE" .env.dev
+                        cp "$SECRET_FILE" .env
                         docker compose -f docker-compose.dev.yml down
                         docker compose -f docker-compose.dev.yml up -d --build
                     '''
