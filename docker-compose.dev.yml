@@ -1,3 +1,4 @@
+name: test-jenkins-api-dev
 services:
   fastapi-app:
     build: .
